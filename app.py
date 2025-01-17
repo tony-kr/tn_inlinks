@@ -1,10 +1,10 @@
+import os
 from flask import Flask, request, send_file, render_template
 import pandas as pd
 import json
 import re
 import time
 from bs4 import BeautifulSoup
-import os
 import shutil
 from werkzeug.utils import secure_filename
 import uuid
@@ -12,8 +12,8 @@ import uuid
 app = Flask(__name__)
 
 # Configure upload folder
-UPLOAD_FOLDER = 'uploads'
-OUTPUT_FOLDER = 'outputs'
+UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', 'uploads')
+OUTPUT_FOLDER = os.environ.get('OUTPUT_FOLDER', 'outputs')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
@@ -184,4 +184,5 @@ def process():
             os.remove(zip_path)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
